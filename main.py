@@ -5,9 +5,9 @@ import subprocess
 import sys
 import time
 
-from EmulatorGUI import GPIO
+import RPi.GPIO as GPIO
 
-# import RPi.GPIO as GPIO
+# from EmulatorGUI import GPIO
 
 
 # ===================== CONFIG =====================
@@ -97,6 +97,18 @@ def cleanup_and_exit(*_):
     sys.exit(0)
 
 
+def turn_everything_on():
+    print("Turning everything ON")
+    for pin in RELAY_PINS:
+        relay_on(pin)
+
+
+def turn_everything_off():
+    print("Turning everything OFF")
+    for pin in RELAY_PINS:
+        relay_off(pin)
+
+
 def main():
     # Handle Ctrl+C cleanly
     signal.signal(signal.SIGINT, cleanup_and_exit)
@@ -110,6 +122,11 @@ def main():
 
     while True:
         main_loop()
+
+        turn_everything_on()
+        time.sleep(10)
+        turn_everything_off()
+        time.sleep(2)
 
 
 def main_loop():
