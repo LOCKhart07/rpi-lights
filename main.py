@@ -11,9 +11,6 @@ import RPi.GPIO as GPIO
 
 # ===================== CONFIG =====================
 
-# GPIO pins connected to relay IN pins (BCM numbering)
-RELAY_PINS = [17, 27, 22]
-
 # True if your relay board turns ON when GPIO is LOW
 ACTIVE_LOW = True
 
@@ -29,6 +26,18 @@ LIGHT_5_PIN = 26  # GPIO26 (pin 37)
 LIGHT_6_PIN = 19  # GPIO19 (pin 35)
 LIGHT_7_PIN = 13  # GPIO13 (pin 33)
 LIGHT_8_PIN = 6  # GPIO6  (pin 31)
+
+# GPIO pins connected to relay IN pins (BCM numbering)
+RELAY_PINS = [
+    LIGHT_1_PIN,
+    LIGHT_2_PIN,
+    LIGHT_3_PIN,
+    LIGHT_4_PIN,
+    LIGHT_5_PIN,
+    LIGHT_6_PIN,
+    LIGHT_7_PIN,
+    LIGHT_8_PIN,
+]
 
 # Cue format:
 # (time_in_seconds_from_start, gpio_pin, state)
