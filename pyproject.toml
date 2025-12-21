@@ -1,0 +1,9 @@
+[project]
+name = "rpi-lights-app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "rpi-gpio>=0.7.1",
+]
