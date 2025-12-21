@@ -5,9 +5,10 @@ import subprocess
 import sys
 import time
 
-import RPi.GPIO as GPIO
+from EmulatorGUI import GPIO
 
-# from EmulatorGUI import GPIO
+# import RPi.GPIO as GPIO
+
 
 # ===================== CONFIG =====================
 
@@ -15,7 +16,10 @@ import RPi.GPIO as GPIO
 ACTIVE_LOW = True
 
 # Audio file (WAV recommended for accurate timing)
-AUDIO_FILE = "monologue.wav"
+AUDIO_FILE = "testing_audio.wav"
+
+# Global audio process handle
+audio_proc = None
 
 
 LIGHT_1_PIN = 21  # GPIO21 (pin 40)
@@ -43,22 +47,22 @@ RELAY_PINS = [
 # (time_in_seconds_from_start, gpio_pin, state)
 # state: True = ON, False = OFF
 CUES = [
-    (0.0, LIGHT_1_PIN, True),  # Light 1 ON immediately
-    (1.0, LIGHT_1_PIN, False),  # Light 1 OFF
-    (1.1, LIGHT_2_PIN, True),  # Light 2 ON
-    (2.0, LIGHT_2_PIN, False),  # Light 2 OFF
-    (2.1, LIGHT_3_PIN, True),  # Light 3 ON
-    (3.0, LIGHT_3_PIN, False),  # Light 3 OFF
-    (3.1, LIGHT_4_PIN, True),  # Light 4 ON
-    (4.0, LIGHT_4_PIN, False),  # Light 4 OFF
-    (4.1, LIGHT_5_PIN, True),  # Light 5 ON
-    (5.0, LIGHT_5_PIN, False),  # Light 5 OFF
-    (5.1, LIGHT_6_PIN, True),  # Light 6 ON
-    (6.0, LIGHT_6_PIN, False),  # Light 6 OFF
-    (6.1, LIGHT_7_PIN, True),  # Light 7 ON
-    (7.0, LIGHT_7_PIN, False),  # Light 7 OFF
-    (7.1, LIGHT_8_PIN, True),  # Light 8 ON
-    (8.0, LIGHT_8_PIN, False),  # Light 8 OFF
+    (0.23, LIGHT_1_PIN, True),  # Light 1 ON immediately
+    (1.76, LIGHT_1_PIN, False),  # Light 1 OFF
+    (1.76, LIGHT_2_PIN, True),  # Light 2 ON
+    (3.17, LIGHT_2_PIN, False),  # Light 2 OFF
+    (3.17, LIGHT_3_PIN, True),  # Light 3 ON
+    (4.7, LIGHT_3_PIN, False),  # Light 3 OFF
+    (4.7, LIGHT_4_PIN, True),  # Light 4 ON
+    (6.23, LIGHT_4_PIN, False),  # Light 4 OFF
+    (6.23, LIGHT_5_PIN, True),  # Light 5 ON
+    (7.7, LIGHT_5_PIN, False),  # Light 5 OFF
+    (7.7, LIGHT_6_PIN, True),  # Light 6 ON
+    (9.15, LIGHT_6_PIN, False),  # Light 6 OFF
+    (9.15, LIGHT_7_PIN, True),  # Light 7 ON
+    (10.71, LIGHT_7_PIN, False),  # Light 7 OFF
+    (10.71, LIGHT_8_PIN, True),  # Light 8 ON
+    (12.14, LIGHT_8_PIN, False),  # Light 8 OFF
 ]
 
 # ================================================
@@ -72,11 +76,24 @@ def relay_off(pin):
     GPIO.output(pin, GPIO.HIGH if ACTIVE_LOW else GPIO.LOW)
 
 
+def stop_audio():
+    # Stop audio if playing
+    if audio_proc and audio_proc.poll() is None:
+        print("Stopping audio...")
+        audio_proc.terminate()
+        try:
+            audio_proc.wait(timeout=1)
+        except subprocess.TimeoutExpired:
+            audio_proc.kill()
+
+
 def cleanup_and_exit(*_):
     print("\nCleaning up GPIO...")
     for pin in RELAY_PINS:
         relay_off(pin)
     GPIO.cleanup()
+    stop_audio()
+    print("Exiting.")
     sys.exit(0)
 
 
@@ -91,10 +108,23 @@ def main():
         GPIO.setup(pin, GPIO.OUT)
         relay_off(pin)
 
+    while True:
+        main_loop()
+
+
+def main_loop():
     print("Starting monologue + light sync")
 
+    for pin in RELAY_PINS:
+        relay_off(pin)
+
     # Start audio playback (non-blocking)
-    # subprocess.Popen(["aplay", AUDIO_FILE])
+    global audio_proc
+    audio_proc = subprocess.Popen(
+        ["aplay", AUDIO_FILE],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
 
     start_time = time.monotonic()
 
@@ -114,10 +144,6 @@ def main():
         print(f"{cue_time:6.2f}s | GPIO {pin} → {action}")
 
     print("All cues completed")
-
-    # Keep script alive until audio finishes (optional)
-    while True:
-        time.sleep(1)
 
 
 if __name__ == "__main__":
