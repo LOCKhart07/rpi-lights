@@ -144,6 +144,9 @@ def main_loop():
         print(f"{cue_time:6.2f}s | GPIO {pin} → {action}")
 
     print("All cues completed")
+    print("waiting for audio to finish...")
+    audio_proc.wait()
+    print("Audio finished.")
 
 
 if __name__ == "__main__":
