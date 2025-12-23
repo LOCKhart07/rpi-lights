@@ -4,6 +4,7 @@ import signal
 import subprocess
 import sys
 import time
+from datetime import datetime
 
 import RPi.GPIO as GPIO
 
@@ -109,6 +110,15 @@ def turn_everything_off():
         relay_off(pin)
 
 
+def is_daytime():
+    """Check if current time is between 1:30 AM and 6:00 PM"""
+    now = datetime.now()
+    current_time = now.time()
+    start_time = datetime.strptime("01:30", "%H:%M").time()
+    end_time = datetime.strptime("18:00", "%H:%M").time()
+    return start_time <= current_time <= end_time
+
+
 def main():
     # Handle Ctrl+C cleanly
     signal.signal(signal.SIGINT, cleanup_and_exit)
@@ -121,15 +131,21 @@ def main():
         relay_off(pin)
 
     while True:
-        main_loop()
+        if is_daytime():
+            print("Daytime mode (1:30 AM - 6:00 PM): Lights staying on")
+            turn_everything_on()
+            time.sleep(60)  # Check every minute
+        else:
+            turn_everything_off()
+            execute_light_audio_cues()
 
-        turn_everything_on()
-        time.sleep(10)
-        turn_everything_off()
-        time.sleep(2)
+            turn_everything_on()
+            time.sleep(30)
+            turn_everything_off()
+            time.sleep(2)
 
 
-def main_loop():
+def execute_light_audio_cues():
     print("Starting monologue + light sync")
 
     for pin in RELAY_PINS:
