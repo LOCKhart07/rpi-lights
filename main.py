@@ -14,7 +14,7 @@ import RPi.GPIO as GPIO
 # ===================== CONFIG =====================
 
 # True if your relay board turns ON when GPIO is LOW
-ACTIVE_LOW = True
+ACTIVE_LOW = False
 
 # Audio file (WAV recommended for accurate timing)
 AUDIO_FILE = "actual_monologue_boosted.wav"
@@ -23,15 +23,14 @@ AUDIO_FILE = "actual_monologue_boosted.wav"
 audio_proc = None
 
 
-LIGHT_1_PIN = 21  # GPIO21 (pin 40)
-LIGHT_2_PIN = 20  # GPIO20 (pin 38)
-LIGHT_3_PIN = 16  # GPIO16 (pin 36)
-# LIGHT_4_PIN = 12  # GPIO12 (pin 32)
+LIGHT_1_PIN = 6  # GPIO21 (pin 40)
+LIGHT_2_PIN = 19  # GPIO20 (pin 38)
+LIGHT_3_PIN = 26  # GPIO16 (pin 36)
 LIGHT_4_PIN = 5  # GPIO5 (pin 29)
-LIGHT_5_PIN = 26  # GPIO26 (pin 37)
-LIGHT_6_PIN = 19  # GPIO19 (pin 35)
-LIGHT_7_PIN = 13  # GPIO13 (pin 33)
-LIGHT_8_PIN = 6  # GPIO6  (pin 31)
+LIGHT_5_PIN = 16  # GPIO26 (pin 37)
+# LIGHT_6_PIN = 19  # GPIO19 (pin 35)
+# LIGHT_7_PIN = 13  # GPIO13 (pin 33)
+# LIGHT_8_PIN = 6  # GPIO6  (pin 31)
 
 # GPIO pins connected to relay IN pins (BCM numbering)
 RELAY_PINS = [
