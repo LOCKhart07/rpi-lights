@@ -6,9 +6,9 @@ import sys
 import time
 from datetime import datetime
 
-import RPi.GPIO as GPIO
+from EmulatorGUI import GPIO
 
-# from EmulatorGUI import GPIO
+# import RPi.GPIO as GPIO
 
 
 # ===================== CONFIG =====================
@@ -17,7 +17,7 @@ import RPi.GPIO as GPIO
 ACTIVE_LOW = True
 
 # Audio file (WAV recommended for accurate timing)
-AUDIO_FILE = "testing_audio.wav"
+AUDIO_FILE = "actual_monologue.wav"
 
 # Global audio process handle
 audio_proc = None
@@ -39,31 +39,31 @@ RELAY_PINS = [
     LIGHT_3_PIN,
     LIGHT_4_PIN,
     LIGHT_5_PIN,
-    LIGHT_6_PIN,
-    LIGHT_7_PIN,
-    LIGHT_8_PIN,
+    # LIGHT_6_PIN,
+    # LIGHT_7_PIN,
+    # LIGHT_8_PIN,
 ]
 
 # Cue format:
 # (time_in_seconds_from_start, gpio_pin, state)
 # state: True = ON, False = OFF
 CUES = [
-    (0.23, LIGHT_1_PIN, True),  # Light 1 ON immediately
-    (1.76, LIGHT_1_PIN, False),  # Light 1 OFF
-    (1.76, LIGHT_2_PIN, True),  # Light 2 ON
-    (3.17, LIGHT_2_PIN, False),  # Light 2 OFF
-    (3.17, LIGHT_3_PIN, True),  # Light 3 ON
-    (4.7, LIGHT_3_PIN, False),  # Light 3 OFF
-    (4.7, LIGHT_4_PIN, True),  # Light 4 ON
-    (6.23, LIGHT_4_PIN, False),  # Light 4 OFF
-    (6.23, LIGHT_5_PIN, True),  # Light 5 ON
-    (7.7, LIGHT_5_PIN, False),  # Light 5 OFF
-    (7.7, LIGHT_6_PIN, True),  # Light 6 ON
-    (9.15, LIGHT_6_PIN, False),  # Light 6 OFF
-    (9.15, LIGHT_7_PIN, True),  # Light 7 ON
-    (10.71, LIGHT_7_PIN, False),  # Light 7 OFF
-    (10.71, LIGHT_8_PIN, True),  # Light 8 ON
-    (12.14, LIGHT_8_PIN, False),  # Light 8 OFF
+    (0.0, LIGHT_1_PIN, True),  # Light 1 ON at 0:00
+    (47, LIGHT_1_PIN, False),  # Light 1 OFF at 0:47
+    (48, LIGHT_2_PIN, True),  # Light 2 ON at 0:48
+    (97, LIGHT_2_PIN, False),  # Light 2 OFF at 1:37
+    (98, LIGHT_3_PIN, True),  # Light 3 ON at 1:38
+    (172, LIGHT_3_PIN, False),  # Light 3 OFF at 2:52
+    (173, LIGHT_4_PIN, True),  # Light 4 ON at 2:53
+    (221, LIGHT_4_PIN, False),  # Light 4 OFF at 3:41
+    (222, LIGHT_5_PIN, True),  # Light 5 ON at 3:42
+    (331, LIGHT_5_PIN, False),  # Light 5 OFF at 5:31
+    # (7.7, LIGHT_6_PIN, True),  # Light 6 ON
+    # (9.15, LIGHT_6_PIN, False),  # Light 6 OFF
+    # (9.15, LIGHT_7_PIN, True),  # Light 7 ON
+    # (10.71, LIGHT_7_PIN, False),  # Light 7 OFF
+    # (10.71, LIGHT_8_PIN, True),  # Light 8 ON
+    # (12.14, LIGHT_8_PIN, False),  # Light 8 OFF
 ]
 
 # ================================================
@@ -131,18 +131,18 @@ def main():
         relay_off(pin)
 
     while True:
-        if is_daytime():
+        if is_daytime() and False:
             print("Daytime mode (1:30 AM - 6:00 PM): Lights staying on")
             turn_everything_on()
             time.sleep(60)  # Check every minute
         else:
             turn_everything_off()
+            time.sleep(1)
             execute_light_audio_cues()
-
             turn_everything_on()
             time.sleep(30)
             turn_everything_off()
-            time.sleep(2)
+            time.sleep(3)
 
 
 def execute_light_audio_cues():
