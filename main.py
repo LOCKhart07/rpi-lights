@@ -136,7 +136,7 @@ def main():
     turn_everything_off()
 
     while True:
-        if is_daytime() and False:
+        if is_daytime():
             print("Daytime mode (1:30 AM - 6:00 PM): Lights staying on")
             turn_everything_on()
             time.sleep(60)  # Check every minute
