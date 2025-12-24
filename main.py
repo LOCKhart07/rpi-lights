@@ -6,9 +6,9 @@ import sys
 import time
 from datetime import datetime
 
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 
-# from EmulatorGUI import GPIO
+from EmulatorGUI import GPIO
 
 
 # ===================== CONFIG =====================
@@ -17,7 +17,7 @@ import RPi.GPIO as GPIO
 ACTIVE_LOW = True
 
 # Audio file (WAV recommended for accurate timing)
-AUDIO_FILE = "actual_monologue.wav"
+AUDIO_FILE = "actual_monologue_boosted.wav"
 
 # Global audio process handle
 audio_proc = None
