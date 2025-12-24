@@ -6,9 +6,9 @@ import sys
 import time
 from datetime import datetime
 
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
-from EmulatorGUI import GPIO
+# from EmulatorGUI import GPIO
 
 
 # ===================== CONFIG =====================
