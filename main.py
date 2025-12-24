@@ -130,6 +130,10 @@ def main():
         GPIO.setup(pin, GPIO.OUT)
         relay_off(pin)
 
+    turn_everything_on()
+    time.sleep(5)
+    turn_everything_off()
+
     while True:
         if is_daytime() and False:
             print("Daytime mode (1:30 AM - 6:00 PM): Lights staying on")
