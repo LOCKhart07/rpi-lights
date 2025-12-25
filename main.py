@@ -115,7 +115,7 @@ def is_daytime():
     now = datetime.now()
     current_time = now.time()
     start_time = datetime.strptime("01:30", "%H:%M").time()
-    end_time = datetime.strptime("18:00", "%H:%M").time()
+    end_time = datetime.strptime("11:00", "%H:%M").time()
     return start_time <= current_time <= end_time
 
 
